@@ -8,20 +8,22 @@ const app = express()
 const port = 3000
 
 app.get('/createDeal', (req, res) => {
+    const params = req.query
+
     const firstAsset = {
-        name: req.query.firstAssetName,
-        count: req.query.firstAssetCount,
-        price: req.query.firstAssetPrice,
+        name: params.firstAssetName,
+        count: params.firstAssetCount,
+        price: params.firstAssetPrice,
     }
     const secondAsset = {
-        name: req.query.secondAssetName,
-        count: req.query.secondAssetCount,
-        price: req.query.secondAssetPrice,
+        name: params.secondAssetName,
+        count: params.secondAssetCount,
+        price: params.secondAssetPrice,
     }
-    const time = getTime(req.query.time)
-    const date = getDate(req.query.time)
-    const type = req.query.type
-    const link = req.query.link
+    const time = getTime(params.time)
+    const date = getDate(params.time)
+    const type = params.type
+    const link = params.link
     const hundreadCount = Math.ceil(firstAsset.price / 100)
 
     let message = `*GigaSwap ${firstAsset.name}/${secondAsset.name} position created!*\n`
@@ -35,29 +37,29 @@ app.get('/createDeal', (req, res) => {
     try {
         sendMessage(message, link)
     } catch(e) {
-
+        console.log(e)
     }
-
-    console.log(1)
 })
 
 app.get('/buyDeal', async (req, res) => {
+    const params = req.query
+
     const firstAsset = {
-        name: req.query.firstAssetName,
-        count: req.query.firstAssetCount,
-        price: req.query.firstAssetPrice,
+        name: params.firstAssetName,
+        count: params.firstAssetCount,
+        price: params.firstAssetPrice,
     }
 
     const secondAsset = {
-        name: req.query.secondAssetName,
-        count: req.query.secondAssetCount,
-        price: req.query.secondAssetPrice,
+        name: params.secondAssetName,
+        count: params.secondAssetCount,
+        price: params.secondAssetPrice,
     }
-    const time = getTime(req.query.time)
-    const date = getDate(req.query.time)
-    const type = req.query.type
-    const link = req.query.link
-    const volume = req.query.volume
+    const time = getTime(params.time)
+    const date = getDate(params.time)
+    const type = params.type
+    const link = params.link
+    const volume = params.volume
     const hundreadCount = Math.ceil(firstAsset.price / 100)
 
     let message = `*GigaSwap OTC buy!*\n`
@@ -75,12 +77,6 @@ app.get('/buyDeal', async (req, res) => {
     }
 })
 
-bot.on('message', async ctx => {
-    const lol = new Date()
-
-    console.log(lol, ctx.update.message.chat.id)
-})
-
 bot.launch()
 
 app.listen(port, () => {
@@ -90,11 +86,7 @@ app.listen(port, () => {
 // Функции:
 
 function getTime(date) {
-    console.log(date)
-
     const correctDate = new Date(date)
-
-    console.log(correctDate)
 
     let hour = correctDate.getHours()
 
